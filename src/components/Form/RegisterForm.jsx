@@ -10,18 +10,14 @@ export default function RegisterForm() {
     const name = e.target.name;
     const type = e.target.type;
 
-    // 1. Nếu là ô chọn File
     if (type === "file") {
       const fileList = e.target.files;
 
-      // Kiểm tra xem người dùng có chọn file thực sự không (tránh trường hợp bấm Cancel)
       if (fileList && fileList.length > 0) {
         const file = fileList[0];
 
-        // Cập nhật file vào state inputs
         setInputs((state) => ({ ...state, [name]: file }));
 
-        // Đọc file để tạo đường dẫn xem trước (Preview)
         const reader = new FileReader();
         reader.onload = (event) => {
           setAvatarPreview(event.target.result);

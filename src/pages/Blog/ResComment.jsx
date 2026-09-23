@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { postCommentService } from "../../services/blogService";
 import { useParams } from "react-router-dom";
 

@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getBlogDetail } from "../../services/blogService";
 import { IMAGE_BASE_URL } from "../../api/axiosClient";
-import ResComment from "../../components/Blog/ResComment";
-import Comment from "../../components/Blog/Comment";
+import ResComment from "./ResComment";
+import Comment from "./Comment";
+import Rate from "./Rate";
 
 export default function BlogDetail() {
   const { id } = useParams();
   const [blogDetail, setBlogDetail] = useState(null);
   const [comments, setComments] = useState([]);
-
   const handleAddComment = (newComment) => {
     setComments((prevComments) => [...prevComments, newComment]);
   };
@@ -76,37 +76,7 @@ export default function BlogDetail() {
         )}
       </div>
       {/*/blog-post-area*/}
-      <div className="rating-area">
-        <ul className="ratings">
-          <li className="rate-this">Rate this item:</li>
-          <li>
-            <i className="fa fa-star color" />
-            <i className="fa fa-star color" />
-            <i className="fa fa-star color" />
-            <i className="fa fa-star" />
-            <i className="fa fa-star" />
-          </li>
-          <li className="color">(6 votes)</li>
-        </ul>
-        <ul className="tag">
-          <li>TAG:</li>
-          <li>
-            <a className="color" href="#">
-              Pink <span>/</span>
-            </a>
-          </li>
-          <li>
-            <a className="color" href="#">
-              T-Shirt <span>/</span>
-            </a>
-          </li>
-          <li>
-            <a className="color" href="#">
-              Girls
-            </a>
-          </li>
-        </ul>
-      </div>
+      <Rate id={id} />
       {/*/rating-area*/}
       <div className="socials-share">
         <a href="#">
