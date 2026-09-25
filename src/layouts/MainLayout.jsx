@@ -20,6 +20,7 @@ export default function MainLayout() {
           <div className="row">
             {isAccountPage && <LeftSideBarAccount />}
             {isBlogPage && <LeftSideBarBlog />}
+            {/* {isAccountPage ? <LeftSideBarAccount /> : <LeftSideBarBlog />} */}
             <Outlet />
           </div>
         </div>

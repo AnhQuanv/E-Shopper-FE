@@ -16,11 +16,17 @@ export default function RegisterForm() {
       if (fileList && fileList.length > 0) {
         const file = fileList[0];
 
-        setInputs((state) => ({ ...state, [name]: file }));
-
         const reader = new FileReader();
         reader.onload = (event) => {
-          setAvatarPreview(event.target.result);
+          const base64String = event.target.result;
+
+          setAvatarPreview(base64String);
+
+          setInputs((state) => ({
+            ...state,
+            [name]: base64String,
+            avatarFile: file,
+          }));
         };
         reader.readAsDataURL(file);
       }
@@ -64,15 +70,15 @@ export default function RegisterForm() {
       errs.addressErr = "Vui lòng nhập address";
       check = false;
     }
-    if (!inputs.avatar || !inputs.avatar.name) {
+    if (!inputs.avatarFile || !inputs.avatarFile.name) {
       errs.avatarErr = "Vui lòng chọn ảnh đại diện";
       check = false;
     } else {
-      if (!validTypes.includes(inputs.avatar.type)) {
+      if (!validTypes.includes(inputs.avatarFile.type)) {
         errs.avatarErr = "File ảnh không hợp lệ";
         check = false;
       }
-      if (inputs.avatar.size > 1024 * 1024) {
+      if (inputs.avatarFile.size > 1024 * 1024) {
         errs.avatarErr = "Size ảnh không hợp lệ";
         check = false;
       }
@@ -82,13 +88,16 @@ export default function RegisterForm() {
     } else {
       setErr({});
       try {
-        const { password_confirm, ...payload } = inputs;
+        // eslint-disable-next-line no-unused-vars
+        const { password_confirm, avatarFile, ...payload } = inputs;
         const dataToSend = {
           ...payload,
           level: 0,
         };
+        console.log(dataToSend);
         const res = await registerService(dataToSend);
         if (res?.message === "success") {
+          console.log("res resgister: ", res);
           alert("Đăng ký thành công!");
           setInputs({});
           setAvatarPreview("");
@@ -115,8 +124,8 @@ export default function RegisterForm() {
         <form encType="multipart/form-data" onSubmit={handleSubmit}>
           <input
             onChange={handleInput}
-            name="name"
             type="text"
+            name="name"
             placeholder="Name"
             value={inputs.name || ""}
           />

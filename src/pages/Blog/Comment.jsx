@@ -4,10 +4,6 @@ import ResComment from "./ResComment";
 
 export default function Comment({ comments, onAddComment }) {
   const [activeReplyId, setActiveReplyId] = useState(null);
-  const getAvatarName = (imagePath) => {
-    if (!imagePath) return "";
-    return imagePath.split("/").pop();
-  };
 
   const handleToggleReply = (commentId) => {
     setActiveReplyId((prevId) => (prevId === commentId ? null : commentId));
@@ -27,7 +23,7 @@ export default function Comment({ comments, onAddComment }) {
                   <a className="pull-left" href="#">
                     <img
                       className="media-object"
-                      src={`http://localhost/laravel/public/upload/user/avatar/${getAvatarName(value.image_user)}`}
+                      src={`http://127.0.0.1:8000/upload/user/avatar/${value.image_user}`}
                       alt={value.name_user}
                       style={{
                         width: "50px",
@@ -82,7 +78,7 @@ export default function Comment({ comments, onAddComment }) {
                         <a className="pull-left" href="#">
                           <img
                             className="media-object"
-                            src={`http://localhost/laravel/public/upload/user/avatar/${valueChild.image_user}`}
+                            src={`http://127.0.0.1:8000/upload/user/avatar/${valueChild.image_user}`}
                             alt={valueChild.name_user}
                             style={{
                               width: "40px",
