@@ -3,12 +3,14 @@ import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import LeftSideBarBlog from "../components/Sidebar/LeftSideBarBlog";
 import Slider from "../pages/Home/Slider";
+import LeftSideBarAccount from "../components/Sidebar/LeftSideBarAccount";
 
 export default function MainLayout() {
   const location = useLocation();
 
-  // Kiểm tra xem có đang ở trang chủ không
   const isHomePage = location.pathname === "/";
+  const isAccountPage = location.pathname.startsWith("/member/account");
+  const isBlogPage = location.pathname.startsWith("/blog");
   return (
     <>
       <Header />
@@ -16,7 +18,9 @@ export default function MainLayout() {
       <section>
         <div className="container">
           <div className="row">
-            <LeftSideBarBlog />
+            {isAccountPage && <LeftSideBarAccount />}
+            {isBlogPage && <LeftSideBarBlog />}
+            {/* {isAccountPage ? <LeftSideBarAccount /> : <LeftSideBarBlog />} */}
             <Outlet />
           </div>
         </div>

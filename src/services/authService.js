@@ -29,3 +29,20 @@ export const loginService = async (data) => {
   });
   return res.data;
 };
+
+export const updateService = async (data, token) => {
+  const formData = new FormData();
+  Object.keys(data).forEach((key) => {
+    if (data[key] !== null && data[key] !== undefined) {
+      formData.append(key, data[key]);
+    }
+  });
+  const res = await axiosClient.post(`user/update/${data.id}`, formData, {
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "multipart/form-data",
+      Accept: "application/json",
+    },
+  });
+  return res.data;
+};
