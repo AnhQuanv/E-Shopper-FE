@@ -7,6 +7,7 @@ export default function ResComment({ onAddComment, replyId = 0, onSuccess }) {
 
   const [content, setContent] = useState("");
   const [err, setErr] = useState("");
+  // eslint-disable-next-line no-unused-vars
   const [user, setUser] = useState(() => {
     const data = localStorage.getItem("user");
     if (data) {
