@@ -7,6 +7,7 @@ export default function Rate({ id }) {
   const [listRating, setListRating] = useState([]);
   const [avgRating, setAvgRating] = useState(0);
   const [hasVoted, setHasVoted] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [user, setUser] = useState(() => {
     const data = localStorage.getItem("user");
     if (data) {
