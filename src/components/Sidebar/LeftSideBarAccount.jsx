@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function LeftSideBarAccount() {
   return (
     <>
@@ -8,14 +10,14 @@ export default function LeftSideBarAccount() {
             <div className="panel panel-default">
               <div className="panel-heading">
                 <h4 className="panel-title">
-                  <a href="#">account</a>
+                  <Link to="/member/account">account</Link>
                 </h4>
               </div>
             </div>
             <div className="panel panel-default">
               <div className="panel-heading">
                 <h4 className="panel-title">
-                  <a href="#">My product</a>
+                  <Link to="/member/account/product/list">My product</Link>
                 </h4>
               </div>
             </div>

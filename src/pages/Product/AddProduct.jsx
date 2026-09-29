@@ -107,7 +107,6 @@ export default function AddProduct() {
       setErr({});
       try {
         const res = await addProductService(inputs, user?.token);
-        console.log("res add: ", res);
         if (res.response === "success") {
           alert("Thêm sản phẩm thành công !");
         } else if (res?.errors) {
@@ -316,9 +315,17 @@ export default function AddProduct() {
                   {err.detailErr}
                 </p>
               )}
-              <button type="submit" className="btn btn-default">
-                Create
-              </button>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  margin: "15px 0",
+                }}
+              >
+                <button type="submit" className="btn btn-default">
+                  Create
+                </button>
+              </div>
             </form>
           </div>
         </div>
