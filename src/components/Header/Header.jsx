@@ -45,9 +45,9 @@ export default function Header() {
       <>
         {data && (
           <li>
-            <a href="">
+            <Link to="/member/account">
               <i className="fa fa-user"></i> Account
-            </a>
+            </Link>
           </li>
         )}
       </>
@@ -124,7 +124,7 @@ export default function Header() {
               <div className="col-md-4 clearfix">
                 <div className="logo pull-left">
                   <a href="index.html">
-                    <img src="images/home/logo.png" alt="" />
+                    <img src="/public/frontend/images/home/logo.png" alt="" />
                   </a>
                 </div>
                 <div className="btn-group pull-right clearfix">
@@ -269,7 +269,7 @@ export default function Header() {
                       </a>
                       <ul role="menu" className="sub-menu">
                         <li>
-                          <a href="blog.html">Blog List</a>
+                          <Link to="/blog">Blog List</Link>
                         </li>
                         <li>
                           <a href="blog-single.html">Blog Single</a>

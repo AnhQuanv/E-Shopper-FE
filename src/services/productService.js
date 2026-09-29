@@ -34,3 +34,13 @@ export const addProductService = async (data, token) => {
 
   return res.data;
 };
+
+export const listProductService = async (token) => {
+  const res = await axiosClient.get("user/my-product", {
+    headers: {
+      Authorization: "Bearer " + token,
+      Accept: "application/json",
+    },
+  });
+  return res.data;
+};
