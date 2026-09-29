@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
-import { listProductService } from "../../services/productService";
-import { Link } from "react-router-dom";
+import {
+  deleteProductService,
+  listProductService,
+} from "../../services/productService";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function ListProduct() {
+  const navigate = useNavigate();
   // eslint-disable-next-line no-unused-vars
   const [user, setUser] = useState(() => {
     const data = localStorage.getItem("user");
@@ -20,11 +24,30 @@ export default function ListProduct() {
   const [listProduct, setListProduct] = useState([]);
 
   const getImage = (images) => {
-    console.log("images: ", images);
     const imageList = JSON.parse(images);
-    console.log("imageList: ", imageList[0]);
-
     return imageList[0];
+  };
+
+  const handleDeleteProduct = async (id) => {
+    const confirmDelete = window.confirm(
+      "Bạn có chắc muốn xóa sản phẩm này không?",
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      const res = await deleteProductService(id, user?.token);
+
+      if (res.response === "success") {
+        alert("Xóa sản phẩm thành công!");
+
+        setListProduct((prev) => prev.filter((product) => product.id !== id));
+      } else {
+        console.log(res);
+      }
+    } catch (error) {
+      console.error("Lỗi xóa sản phẩm:", error);
+    }
   };
 
   useEffect(() => {
@@ -35,7 +58,6 @@ export default function ListProduct() {
           return;
         }
         const res = await listProductService(user.token);
-        console.log("res: data", res);
         if (res.response === "success") {
           const productList = Array.isArray(res.data)
             ? res.data
@@ -127,7 +149,14 @@ export default function ListProduct() {
                         textAlign: "center",
                       }}
                     >
-                      <button className="btn btn-primary">Edit</button>
+                      <button
+                        className="btn btn-primary"
+                        onClick={() =>
+                          navigate(`/member/account/product/edit/${product.id}`)
+                        }
+                      >
+                        Edit
+                      </button>
 
                       <button
                         style={{
@@ -136,6 +165,7 @@ export default function ListProduct() {
                           marginLeft: "12px",
                         }}
                         className="btn btn-primary"
+                        onClick={() => handleDeleteProduct(product.id)}
                       >
                         Delete
                       </button>
@@ -152,7 +182,10 @@ export default function ListProduct() {
                 marginBottom: "20px",
               }}
             >
-              <Link to="/member/account/product/add" className="btn btn-primary">
+              <Link
+                to="/member/account/product/add"
+                className="btn btn-primary"
+              >
                 Add New
               </Link>
             </div>

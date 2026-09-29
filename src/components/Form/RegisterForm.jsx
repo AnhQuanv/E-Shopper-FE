@@ -94,10 +94,8 @@ export default function RegisterForm() {
           ...payload,
           level: 0,
         };
-        console.log(dataToSend);
         const res = await registerService(dataToSend);
         if (res?.message === "success") {
-          console.log("res resgister: ", res);
           alert("Đăng ký thành công!");
           setInputs({});
           setAvatarPreview("");
