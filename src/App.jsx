@@ -9,6 +9,7 @@ import AddProduct from "./pages/Product/AddProduct";
 import ListProduct from "./pages/Product/ListProduct";
 import EditProduct from "./pages/Product/EditProduct";
 import DetailProduct from "./pages/Product/DetailProduct";
+import Cart from "./pages/Cart/Cart";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="product/edit/:id" element={<EditProduct />} />
         </Route>
         <Route path="product-details/:id" element={<DetailProduct />} />
+        <Route path="cart" element={<Cart />} />
       </Route>
     </Routes>
   );

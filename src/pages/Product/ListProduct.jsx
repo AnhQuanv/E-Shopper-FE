@@ -4,6 +4,7 @@ import {
   listProductService,
 } from "../../services/productService";
 import { Link, useNavigate } from "react-router-dom";
+import { getImage } from "../../utils/cart";
 
 export default function ListProduct() {
   const navigate = useNavigate();
@@ -22,11 +23,6 @@ export default function ListProduct() {
   });
 
   const [listProduct, setListProduct] = useState([]);
-
-  const getImage = (images) => {
-    const imageList = JSON.parse(images);
-    return imageList[0];
-  };
 
   const handleDeleteProduct = async (id) => {
     const confirmDelete = window.confirm(

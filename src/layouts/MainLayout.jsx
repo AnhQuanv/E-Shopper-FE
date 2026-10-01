@@ -10,6 +10,11 @@ export default function MainLayout() {
 
   const isHomePage = location.pathname === "/";
   const isAccountPage = location.pathname.startsWith("/member/account");
+  const isLoginPage = location.pathname === "/member/login-register";
+
+  const isCartPage = location.pathname === "/cart";
+
+  const hideSidebar = isLoginPage || isCartPage;
   return (
     <>
       <Header />
@@ -17,7 +22,8 @@ export default function MainLayout() {
       <section>
         <div className="container">
           <div className="row">
-            {isAccountPage ? <LeftSideBarAccount /> : <LeftSideBarBlog />}
+            {!hideSidebar &&
+              (isAccountPage ? <LeftSideBarAccount /> : <LeftSideBarBlog />)}
             <Outlet />
           </div>
         </div>
