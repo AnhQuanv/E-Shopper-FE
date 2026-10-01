@@ -1,256 +1,91 @@
+import { useEffect, useState } from "react";
+import { listHomeService } from "../../services/productService";
+
 export default function Home() {
+  const [listProduct, setListProduct] = useState([]);
+
+  const getImageSrc = (id, images) => {
+    let imageList;
+    try {
+      imageList =
+        typeof images === "string" ? JSON.parse(images) : images || [];
+      // eslint-disable-next-line no-unused-vars
+    } catch (e) {
+      imageList = [];
+    }
+
+    const imageName = imageList[0];
+    if (!imageName) return;
+    return `http://127.0.0.1:8000/upload/product/${id}/${imageName}`;
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await listHomeService();
+        if (res.response === "success") {
+          setListProduct(res.data);
+        } else {
+          console.log("Lấy list product home thất bại:", res.message || res);
+        }
+      } catch (error) {
+        console.log("Lỗi hệ thống khi gọi listHomeService:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (!listProduct) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <div className="col-sm-9 padding-right">
       <div className="features_items">
         <h2 className="title text-center">Features Items</h2>
-        <div className="col-sm-4">
-          <div className="product-image-wrapper">
-            <div className="single-products">
-              <div className="productinfo text-center">
-                <img src="frontend/images/home/product1.jpg" alt="" />
-                <h2>$56</h2>
-                <p>Easy Polo Black Edition1</p>
-                <a data-id="1" href="#" className="btn btn-default add-to-cart">
-                  <i className="fa fa-shopping-cart"></i>Add to cart
-                </a>
-              </div>
-              <div className="product-overlay">
-                <div className="overlay-content">
-                  <h2>$56</h2>
-                  <p>Easy Polo Black Edition</p>
-                  <a
-                    data-id="1"
-                    href="#"
-                    className="btn btn-default add-to-cart"
-                  >
-                    <i className="fa fa-shopping-cart"></i>Add to cart
-                  </a>
+        {listProduct.length > 0 ? (
+          listProduct.map((product) => (
+            <div className="col-sm-4" key={product.id}>
+              <div className="product-image-wrapper">
+                <div className="single-products">
+                  <div className="productinfo text-center">
+                    <img
+                      src={getImageSrc(product.id_user, product.image)}
+                      alt=""
+                    />
+                    <h2>${product.price}</h2>
+                    <p>{product.name}</p>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-around",
+                      }}
+                    >
+                      <a
+                        data-id="1"
+                        href="#"
+                        className="btn btn-default add-to-cart"
+                      >
+                        <i className="fa fa-shopping-cart"></i>Add to cart
+                      </a>
+                      <a
+                        data-id="1"
+                        href="#"
+                        className="btn btn-default add-to-cart"
+                      >
+                        <i></i>Detail
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="choose">
-              <ul className="nav nav-pills nav-justified">
-                <li>
-                  <a href="#">
-                    <i className="fa fa-plus-square"></i>Add to wishlist
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <i className="fa fa-plus-square"></i>Add to compare
-                  </a>
-                </li>
-              </ul>
-            </div>
+          ))
+        ) : (
+          <div>
+            <p>Chưa có sản phẩm nào ở home</p>
           </div>
-        </div>
-        <div className="col-sm-4">
-          <div className="product-image-wrapper">
-            <div className="single-products">
-              <div className="productinfo text-center">
-                <img src="frontend/images/home/product2.jpg" alt="" />
-                <h2>$56</h2>
-                <p>Easy Polo Black Edition2</p>
-                <a data-id="2" href="#" className="btn btn-default add-to-cart">
-                  <i className="fa fa-shopping-cart"></i>Add to cart
-                </a>
-              </div>
-              <div className="product-overlay">
-                <div className="overlay-content">
-                  <h2>$56</h2>
-                  <p>Easy Polo Black Edition</p>
-                  <a
-                    data-id="2"
-                    href="#"
-                    className="btn btn-default add-to-cart"
-                  >
-                    <i className="fa fa-shopping-cart"></i>Add to cart
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="choose">
-              <ul className="nav nav-pills nav-justified">
-                <li>
-                  <a href="#">
-                    <i className="fa fa-plus-square"></i>Add to wishlist
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <i className="fa fa-plus-square"></i>Add to compare
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="col-sm-4">
-          <div className="product-image-wrapper">
-            <div className="single-products">
-              <div className="productinfo text-center">
-                <img src="frontend/images/home/product3.jpg" alt="" />
-                <h2>$56</h2>
-                <p>Easy Polo Black Edition3</p>
-                <a data-id="3" href="#" className="btn btn-default add-to-cart">
-                  <i className="fa fa-shopping-cart"></i>Add to cart
-                </a>
-              </div>
-              <div className="product-overlay">
-                <div className="overlay-content">
-                  <h2>$56</h2>
-                  <p>Easy Polo Black Edition</p>
-                  <a
-                    data-id="3"
-                    href="#"
-                    className="btn btn-default add-to-cart"
-                  >
-                    <i className="fa fa-shopping-cart"></i>Add to cart
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="choose">
-              <ul className="nav nav-pills nav-justified">
-                <li>
-                  <a href="#">
-                    <i className="fa fa-plus-square"></i>Add to wishlist
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <i className="fa fa-plus-square"></i>Add to compare
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="col-sm-4">
-          <div className="product-image-wrapper">
-            <div className="single-products">
-              <div className="productinfo text-center">
-                <img src="frontend/images/home/product4.jpg" alt="" />
-                <h2>$56</h2>
-                <p>Easy Polo Black Edition4</p>
-                <a data-id="4" href="#" className="btn btn-default add-to-cart">
-                  <i className="fa fa-shopping-cart"></i>Add to cart
-                </a>
-              </div>
-              <div className="product-overlay">
-                <div className="overlay-content">
-                  <h2>$56</h2>
-                  <p>Easy Polo Black Edition</p>
-                  <a
-                    data-id="4"
-                    href="#"
-                    className="btn btn-default add-to-cart"
-                  >
-                    <i className="fa fa-shopping-cart"></i>Add to cart
-                  </a>
-                </div>
-              </div>
-              <img src="frontend/images/home/new.png" className="new" alt="" />
-            </div>
-            <div className="choose">
-              <ul className="nav nav-pills nav-justified">
-                <li>
-                  <a href="#">
-                    <i className="fa fa-plus-square"></i>Add to wishlist
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <i className="fa fa-plus-square"></i>Add to compare
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="col-sm-4">
-          <div className="product-image-wrapper">
-            <div className="single-products">
-              <div className="productinfo text-center">
-                <img src="frontend/images/home/product5.jpg" alt="" />
-                <h2>$56</h2>
-                <p>Easy Polo Black Edition5</p>
-                <a data-id="5" href="#" className="btn btn-default add-to-cart">
-                  <i className="fa fa-shopping-cart"></i>Add to cart
-                </a>
-              </div>
-              <div className="product-overlay">
-                <div className="overlay-content">
-                  <h2>$56</h2>
-                  <p>Easy Polo Black Edition</p>
-                  <a
-                    data-id="5"
-                    href="#"
-                    className="btn btn-default add-to-cart"
-                  >
-                    <i className="fa fa-shopping-cart"></i>Add to cart
-                  </a>
-                </div>
-              </div>
-              <img src="frontend/images/home/sale.png" className="new" alt="" />
-            </div>
-            <div className="choose">
-              <ul className="nav nav-pills nav-justified">
-                <li>
-                  <a href="#">
-                    <i className="fa fa-plus-square"></i>Add to wishlist
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <i className="fa fa-plus-square"></i>Add to compare
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="col-sm-4">
-          <div className="product-image-wrapper">
-            <div className="single-products">
-              <div className="productinfo text-center">
-                <img src="frontend/images/home/product6.jpg" alt="" />
-                <h2>$56</h2>
-                <p>Easy Polo Black Edition6</p>
-                <a data-id="6" href="#" className="btn btn-default add-to-cart">
-                  <i className="fa fa-shopping-cart"></i>Add to cart
-                </a>
-              </div>
-              <div className="product-overlay">
-                <div className="overlay-content">
-                  <h2>$56</h2>
-                  <p>Easy Polo Black Edition</p>
-                  <a
-                    data-id="6"
-                    href="#"
-                    className="btn btn-default add-to-cart"
-                  >
-                    <i className="fa fa-shopping-cart"></i>Add to cart
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="choose">
-              <ul className="nav nav-pills nav-justified">
-                <li>
-                  <a href="#">
-                    <i className="fa fa-plus-square"></i>Add to wishlist
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <i className="fa fa-plus-square"></i>Add to compare
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        )}
       </div>
 
       <div className="category-tab">

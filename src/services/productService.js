@@ -96,3 +96,14 @@ export const deleteProductService = async (id, token) => {
   });
   return res.data;
 };
+
+export const listHomeService = async () => {
+  const res = await axiosClient.get("product");
+  return res.data;
+};
+
+export const productDetailService = async (id) => {
+  const res = await axiosClient.get(`product/detail/${id}`);
+  console.log("res ser: ", res);
+  return res.data
+};
