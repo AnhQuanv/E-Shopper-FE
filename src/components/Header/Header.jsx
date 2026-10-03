@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { CartContext } from "../../context/CartContext";
 
 export default function Header() {
   const navigate = useNavigate();
+  const { cart } = useContext(CartContext);
   const [user, setUser] = useState(() => {
     const data = localStorage.getItem("user");
     if (data) {
@@ -17,11 +19,9 @@ export default function Header() {
   });
 
   const renderLogin = () => {
-    const data = localStorage.getItem("user");
-
     return (
       <>
-        {data ? (
+        {user ? (
           <li>
             <a href="#" onClick={handleLogout}>
               <i className="fa fa-lock"></i> Logout
@@ -187,25 +187,30 @@ export default function Header() {
                         <i className="fa fa-shopping-cart"></i>
                         Cart
                       </a>
-                      <span
-                        style={{
-                          position: "absolute",
-                          border: "1px solid red",
-                          borderRadius: "50%",
-                          width: "12px",
-                          height: "12px",
-                          display: "none",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          color: "white",
-                          backgroundColor: "red",
-                          top: "7px",
-                          left: "10px",
-                          fontSize: "8px",
-                        }}
-                      >
-                        3
-                      </span>
+                      {Object.keys(cart).length > 0 && (
+                        <span
+                          style={{
+                            position: "absolute",
+                            border: "1px solid red",
+                            borderRadius: "50%",
+                            width: "12px",
+                            height: "12px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: "white",
+                            backgroundColor: "red",
+                            top: "7px",
+                            left: "10px",
+                            fontSize: "8px",
+                          }}
+                        >
+                          {Object.values(cart).reduce(
+                            (total, qty) => total + qty,
+                            0,
+                          )}
+                        </span>
+                      )}
                     </li>
                     {renderLogin()}
                   </ul>

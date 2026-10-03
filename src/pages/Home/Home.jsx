@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { listHomeService } from "../../services/productService";
-import { addToCart } from "../../utils/cart";
 import { useNavigate } from "react-router-dom";
+import { CartContext } from "../../context/CartContext";
 
 export default function Home() {
   const [listProduct, setListProduct] = useState([]);
   const navigate = useNavigate();
-
+  const { addToCart } = useContext(CartContext);
   const getImageSrc = (id, images) => {
     let imageList;
     try {
@@ -27,7 +27,6 @@ export default function Home() {
       try {
         const res = await listHomeService();
         if (res.response === "success") {
-          console.log("res home: ", res.data);
           setListProduct(res.data);
         } else {
           console.log("Lấy list product home thất bại:", res.message || res);

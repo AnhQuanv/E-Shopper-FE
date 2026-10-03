@@ -23,10 +23,6 @@ export default function Cart() {
   };
 
   const handleDecreaseQuantity = (id) => {
-    if (!cart[id] || cart[id] <= 1) {
-      alert("Không thể giảm thêm!");
-      return;
-    }
     setProducts((prev) =>
       prev.map((product) =>
         product.id === id
