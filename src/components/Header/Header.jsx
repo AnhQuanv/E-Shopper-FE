@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { CartContext } from "../../context/CartContext";
+import { useSelector } from "react-redux";
 
 export default function Header() {
   const navigate = useNavigate();
+  const { cart } = useContext(CartContext);
   const [user, setUser] = useState(() => {
     const data = localStorage.getItem("user");
     if (data) {
@@ -15,13 +18,14 @@ export default function Header() {
     }
     return null;
   });
-
+  const cartRedux = useSelector((state) => state.cart.items);
+  const totalQty = Object.values(cartRedux).reduce((sum, qty) => {
+    return sum + qty;
+  }, 0);
   const renderLogin = () => {
-    const data = localStorage.getItem("user");
-
     return (
       <>
-        {data ? (
+        {user ? (
           <li>
             <a href="#" onClick={handleLogout}>
               <i className="fa fa-lock"></i> Logout
@@ -181,31 +185,57 @@ export default function Header() {
                       <a href="checkout.html">
                         <i className="fa fa-crosshairs"></i> Checkout
                       </a>
+                      {totalQty > 0 && (
+                        <span
+                          style={{
+                            position: "absolute",
+                            border: "1px solid red",
+                            borderRadius: "50%",
+                            width: "12px",
+                            height: "12px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: "white",
+                            backgroundColor: "red",
+                            top: "7px",
+                            left: "10px",
+                            fontSize: "8px",
+                          }}
+                        >
+                          {totalQty}
+                        </span>
+                      )}
                     </li>
                     <li id="cart-quality" style={{ display: "flex" }}>
-                      <a href="cart.html">
+                      <Link to="/cart">
                         <i className="fa fa-shopping-cart"></i>
                         Cart
-                      </a>
-                      <span
-                        style={{
-                          position: "absolute",
-                          border: "1px solid red",
-                          borderRadius: "50%",
-                          width: "12px",
-                          height: "12px",
-                          display: "none",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          color: "white",
-                          backgroundColor: "red",
-                          top: "7px",
-                          left: "10px",
-                          fontSize: "8px",
-                        }}
-                      >
-                        3
-                      </span>
+                      </Link>
+                      {Object.keys(cart).length > 0 && (
+                        <span
+                          style={{
+                            position: "absolute",
+                            border: "1px solid red",
+                            borderRadius: "50%",
+                            width: "12px",
+                            height: "12px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: "white",
+                            backgroundColor: "red",
+                            top: "7px",
+                            left: "10px",
+                            fontSize: "8px",
+                          }}
+                        >
+                          {Object.values(cart).reduce(
+                            (total, qty) => total + qty,
+                            0,
+                          )}
+                        </span>
+                      )}
                     </li>
                     {renderLogin()}
                   </ul>

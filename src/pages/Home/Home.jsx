@@ -1,11 +1,15 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { listHomeService } from "../../services/productService";
-import { addToCart } from "../../utils/cart";
 import { useNavigate } from "react-router-dom";
+import { CartContext } from "../../context/CartContext";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../store/cartSlice";
 
 export default function Home() {
+  const dispatch = useDispatch();
   const [listProduct, setListProduct] = useState([]);
   const navigate = useNavigate();
+  // const { addToCart } = useContext(CartContext);
 
   const getImageSrc = (id, images) => {
     let imageList;
@@ -27,7 +31,6 @@ export default function Home() {
       try {
         const res = await listHomeService();
         if (res.response === "success") {
-          console.log("res home: ", res.data);
           setListProduct(res.data);
         } else {
           console.log("Lấy list product home thất bại:", res.message || res);
@@ -67,7 +70,7 @@ export default function Home() {
                     >
                       <button
                         data-id="1"
-                        onClick={() => addToCart(product.id)}
+                        onClick={() => dispatch(addToCart(product.id))}
                         className="btn btn-default add-to-cart"
                       >
                         <i className="fa fa-shopping-cart"></i>Add to cart

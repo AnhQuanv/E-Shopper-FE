@@ -10,10 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.13.0",
     "axios": "^1.20.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-multi-carousel": "^2.8.6",
+    "react-redux": "^9.3.0",
     "react-router-dom": "^7.18.4",
     "react-simple-star-rating": "^5.1.7"
   },

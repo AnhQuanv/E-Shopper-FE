@@ -2,67 +2,73 @@ import { useEffect, useState } from "react";
 import { postCartService } from "../../services/cartService";
 import { useNavigate } from "react-router-dom";
 import { getImage } from "../../utils/cart";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  decreaseQuality,
+  increaseQuality,
+  removeFromCart,
+} from "../../store/cartSlice";
 
 export default function Cart() {
-  const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const cart = useSelector((state) => state.cart.items);
+  const [products, setProducts] = useState([]);
+  const totalPrice = products.reduce(
+    (total, product) => total + Number(product.price) * Number(product.qty),
+    0,
+  );
+  // const handleIncreaseQuantity = (id) => {
+  //   setProducts((prev) =>
+  //     prev.map((product) =>
+  //       product.id === id
+  //         ? { ...product, qty: Number(product.qty + 1) }
+  //         : product,
+  //     ),
+  //   );
+  //   const cart = JSON.parse(localStorage.getItem("cart")) || {};
 
-  const handleIncreaseQuantity = (id) => {
-    setProducts((prev) =>
-      prev.map((product) =>
-        product.id === id
-          ? { ...product, qty: Number(product.qty + 1) }
-          : product,
-      ),
-    );
-    const cart = JSON.parse(localStorage.getItem("cart")) || {};
+  //   cart[id] = (cart[id] || 0) + 1;
 
-    cart[id] = (cart[id] || 0) + 1;
+  //   localStorage.setItem("cart", JSON.stringify(cart));
+  // };
 
-    localStorage.setItem("cart", JSON.stringify(cart));
-  };
+  // const handleDecreaseQuantity = (id) => {
+  //   setProducts((prev) =>
+  //     prev.map((product) =>
+  //       product.id === id
+  //         ? { ...product, qty: Math.max(1, Number(product.qty) - 1) }
+  //         : product,
+  //     ),
+  //   );
+  //   const cart = JSON.parse(localStorage.getItem("cart")) || {};
 
-  const handleDecreaseQuantity = (id) => {
-    if (!cart[id] || cart[id] <= 1) {
-      alert("Không thể giảm thêm!");
-      return;
-    }
-    setProducts((prev) =>
-      prev.map((product) =>
-        product.id === id
-          ? { ...product, qty: Math.max(1, Number(product.qty) - 1) }
-          : product,
-      ),
-    );
-    const cart = JSON.parse(localStorage.getItem("cart")) || {};
+  //   if (cart[id] > 1) {
+  //     cart[id] -= 1;
+  //   }
 
-    if (cart[id] > 1) {
-      cart[id] -= 1;
-    }
+  //   localStorage.setItem("cart", JSON.stringify(cart));
+  // };
 
-    localStorage.setItem("cart", JSON.stringify(cart));
-  };
-
-  const handleDeleteProduct = (id) => {
-    const confirmDelete = window.confirm(
-      "Bạn có chắc muốn xoá sản phẩm này không ?",
-    );
-    if (!confirmDelete) return;
-    setProducts((prev) => prev.filter((product) => product.id !== id));
-    localStorage.setItem("cart", JSON.stringify(products));
-  };
+  // const handleDeleteProduct = (id) => {
+  //   const confirmDelete = window.confirm(
+  //     "Bạn có chắc muốn xoá sản phẩm này không ?",
+  //   );
+  //   if (!confirmDelete) return;
+  //   setProducts((prev) => prev.filter((product) => product.id !== id));
+  //   localStorage.setItem("cart", JSON.stringify(products));
+  // };
 
   useEffect(() => {
     const fetchListCart = async () => {
-      const data = JSON.parse(localStorage.getItem("cart"));
-      console.log("data: ", data);
-      if (!data || Object.keys(data).length === 0) {
+      // const data = JSON.parse(localStorage.getItem("cart"));
+      if (!cart || Object.keys(cart).length === 0) {
         alert("không có sản phẩm nào!");
         navigate("/");
         return;
       }
       try {
-        const res = await postCartService(data);
+        const res = await postCartService(cart);
         console.log("res cart: ", res);
         if (res.response === "success") {
           setProducts(res.data);
@@ -74,7 +80,7 @@ export default function Cart() {
       }
     };
     fetchListCart();
-  }, [navigate]);
+  }, [cart, navigate]);
 
   return (
     <div>
@@ -101,8 +107,8 @@ export default function Cart() {
                     <td />
                   </tr>
                 </thead>
-                {products.map((product) => (
-                  <tbody>
+                <tbody>
+                  {products.map((product) => (
                     <tr>
                       <td className="cart_product">
                         <a href>
@@ -130,7 +136,9 @@ export default function Cart() {
                         <div className="cart_quantity_button">
                           <a
                             className="cart_quantity_up"
-                            onClick={() => handleIncreaseQuantity(product.id)}
+                            onClick={() =>
+                              dispatch(increaseQuality(product.id))
+                            }
                           >
                             +
                           </a>
@@ -144,7 +152,9 @@ export default function Cart() {
                           />
                           <a
                             className="cart_quantity_down"
-                            onClick={() => handleDecreaseQuantity(product.id)}
+                            onClick={() =>
+                              dispatch(decreaseQuality(product.id))
+                            }
                           >
                             -
                           </a>
@@ -158,14 +168,18 @@ export default function Cart() {
                       <td className="cart_delete">
                         <a
                           className="cart_quantity_delete"
-                          onClick={() => handleDeleteProduct(product.id)}
+                          onClick={() => dispatch(removeFromCart(product.id))}
                         >
                           <i className="fa fa-times" />
                         </a>
                       </td>
                     </tr>
-                  </tbody>
-                ))}
+                  ))}
+                  <tr>
+                    <td colSpan={4}>Total</td>
+                    <td colSpan={4}>${totalPrice}</td>
+                  </tr>
+                </tbody>
               </table>
             </div>
           ) : (
@@ -174,7 +188,7 @@ export default function Cart() {
             </div>
           )}
         </div>
-      </section>{" "}
+      </section>
       {/*/#cart_items*/}
       <section id="do_action">
         <div className="container">
